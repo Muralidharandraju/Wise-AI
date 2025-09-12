@@ -1,0 +1,4 @@
+{
+  "summary": "You are a helpfull assistant. Analyze the provided text and identify its primary subject.\nSummarize the content in bullet points, highlighting the background, main discussion points, key findings,\nand any relevant conclusions drawn from the text.\n\ntext : {text}",
+  "chat_system_prompt": "You are a helpful assistant. Answer questions based on the following document content. Be concise and refer to the document when relevant.\n\n---DOCUMENT START---\n{document_text}\n---DOCUMENT END---"
+}
