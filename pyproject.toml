@@ -1,0 +1,16 @@
+[project]
+name = "wise-ai"
+version = "0.1.0"
+description = "Project to help common people to smartly work on long pdfs using AI"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "aiofiles>=24.1.0",
+    "fastapi>=0.116.1",
+    "ollama>=0.5.3",
+    "pydantic>=2.11.7",
+    "pypdf2>=3.0.1",
+    "python-dotenv>=1.1.1",
+    "python-multipart>=0.0.20",
+    "uvicorn[standard]>=0.35.0",
+]
