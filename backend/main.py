@@ -21,15 +21,17 @@ class ChatResponse(BaseModel):
     content: str
 
 @app.post("/summarize")
-async def summarize_pdf(file: UploadFile = File(...)):
-    if file.content_type != "application/pdf":
-        raise HTTPException(400, detail="Invalid file type. Please upload a PDF.")
+async def summarize_pdf(files: List[UploadFile] = File(...)):
+    files_bytes = []
+    for file in files:
+        if file.content_type != "application/pdf":
+            raise HTTPException(400, detail=f"Invalid file type: {file.filename}. Please upload PDFs only.")
+        files_bytes.append(await file.read())
 
-    file_bytes = await file.read()
-    text = await services.get_pdf_text(file_bytes)
+    text = await services.get_text_from_pdfs(files_bytes)
 
     if not text:
-        raise HTTPException(404, detail="Could not extract text from the PDF.")
+        raise HTTPException(404, detail="Could not extract text from the PDFs.")
 
     summary = await services.generate_summary(text)
     return {"summary": summary, "document_text": text}

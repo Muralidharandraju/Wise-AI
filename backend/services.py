@@ -4,6 +4,7 @@ import asyncio
 from io import BytesIO
 import json
 import os
+from typing import List
 
 # Get the absolute path to the prompts.json file
 PROMPTS_FILE = os.path.join(os.path.dirname(__file__), 'prompts.json')
@@ -15,19 +16,19 @@ summary_prompt_template = prompts['summary']
 chat_system_prompt = prompts['chat_system_prompt']
 
 
-# Asynchronously extract text from a PDF file
-async def get_pdf_text(file_bytes: bytes) -> str:
+# Asynchronously extract text from multiple PDF files
+async def get_text_from_pdfs(files_bytes: List[bytes]) -> str:
     def extract_text():
         text = ""
-        try:
-            pdf_file = BytesIO(file_bytes)
-            reader = pdf.PdfReader(pdf_file)
-            for page in reader.pages:
-                text += page.extract_text() or ""
-        except Exception as e:
-            # Handle potential PyPDF2 errors
-            print(f"Error processing PDF: {e}")
-            return ""
+        for file_bytes in files_bytes:
+            try:
+                pdf_file = BytesIO(file_bytes)
+                reader = pdf.PdfReader(pdf_file)
+                for page in reader.pages:
+                    text += page.extract_text() or ""
+            except Exception as e:
+                # Handle potential PyPDF2 errors
+                print(f"Error processing PDF: {e}")
         return text
 
     loop = asyncio.get_event_loop()
