@@ -1,5 +1,5 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException, status
-from pydantic import BaseModel
+from model import ChatMessage,ChatRequest,ChatResponse
 from typing import List
 from dotenv import load_dotenv
 import uvicorn
@@ -10,16 +10,7 @@ load_dotenv()
 
 app = FastAPI()
 
-class ChatMessage(BaseModel):
-    role: str
-    content: str
 
-class ChatRequest(BaseModel):
-    document_text: str
-    messages: List[ChatMessage]
-
-class ChatResponse(BaseModel):
-    content: str
 
 @app.post("/summarize", status_code=status.HTTP_200_OK)
 async def summarize_pdf(files: List[UploadFile] = File(...)):
