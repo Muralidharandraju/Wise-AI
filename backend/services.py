@@ -5,6 +5,7 @@ from io import BytesIO
 import json
 import os
 from typing import List
+from fastapi import HTTPException, status
 
 # Get the absolute path to the prompts.json file
 PROMPTS_FILE = os.path.join(os.path.dirname(__file__), 'prompts.json')
@@ -45,8 +46,10 @@ async def generate_summary(text: str) -> str:
             ollama.generate, model='gemma3', prompt=summary_prompt
         )
         return response.get('response', 'Failed to generate summary.')
+    except ollama.ResponseError as e:
+        raise HTTPException(status_code=e.status_code, detail=e.error)
     except Exception as e:
-        return f"Error during summary generation: {e}"
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"An unexpected error occurred during summary generation: {e}")
 
 # Asynchronously get a chat response
 async def get_chat_response(document_text: str, messages: list) -> str:
@@ -62,5 +65,7 @@ async def get_chat_response(document_text: str, messages: list) -> str:
             ollama.chat, model='gemma3', messages=messages_for_ollama
         )
         return response.get('message', {}).get('content', 'Sorry, I could not process your request.')
+    except ollama.ResponseError as e:
+        raise HTTPException(status_code=e.status_code, detail=e.error)
     except Exception as e:
-        return f"Error during chat generation: {e}"
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"An unexpected error occurred during chat generation: {e}")
