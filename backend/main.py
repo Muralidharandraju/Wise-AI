@@ -11,7 +11,6 @@ load_dotenv()
 app = FastAPI()
 
 
-
 @app.post("/summarize", status_code=status.HTTP_200_OK)
 async def summarize_pdf(files: List[UploadFile] = File(...)):
     files_bytes = []
