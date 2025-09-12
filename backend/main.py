@@ -1,10 +1,10 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException, status
-from model import ChatMessage,ChatRequest,ChatResponse
+from backend.models.model import ChatMessage,ChatRequest,ChatResponse
 from typing import List
 from dotenv import load_dotenv
 import uvicorn
 from backend import services
-import config
+import backend.config
 
 load_dotenv()
 
