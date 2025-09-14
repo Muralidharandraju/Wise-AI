@@ -5,11 +5,20 @@ from dotenv import load_dotenv
 import uvicorn
 from backend import services
 import backend.config
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
 app = FastAPI()
 
+# Add CORS middleware to allow frontend requests
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Adjust this to your frontend origin in production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/summarize", status_code=status.HTTP_200_OK)
 async def summarize_pdf(files: List[UploadFile] = File(...)):
@@ -28,6 +37,7 @@ async def summarize_pdf(files: List[UploadFile] = File(...)):
         return {"summary": summary, "document_text": text}
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"An error occurred during summarization: {e}")
+
 
 @app.post("/chat", response_model=ChatResponse, status_code=status.HTTP_200_OK)
 async def chat_with_doc(request: ChatRequest):
