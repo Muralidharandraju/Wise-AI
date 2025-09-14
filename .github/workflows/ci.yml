@@ -24,7 +24,7 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         if [ -f pyproject.toml ]; then pip install poetry && poetry install --no-root; fi
-        python -m pip install pytest pytest-asyncio PyPDF2
+        python -m pip install pytest pytest-asyncio aiofiles fastapi ollama pydantic pypdf2 python-dotenv python-multipart uvicorn
 
     - name: Run tests
       env:
